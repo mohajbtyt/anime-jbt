@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أنمي نفسك</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #ffdbf5, #d0eaff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      color: #ff4081;
+    }
+    p {
+      font-size: 1.2em;
+      color: #444;
+      max-width: 600px;
+    }
+    .upload-section {
+      margin-top: 30px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    input[type="file"] {
+      margin: 10px 0;
+    }
+    .preview {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .preview img {
+      max-width: 200px;
+      border-radius: 12px;
+      border: 2px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      font-size: 1em;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e91e63;
+    }
+    #loading {
+      margin-top: 20px;
+      color: #888;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>أنمي نفسك</h1>
+  <p>حوّل صورتك العادية إلى شخصية أنمي رائعة باستخدام الذكاء الاصطناعي 🤖🎨</p>
+
+  <div class="upload-section">
+    <input type="file" accept="image/*" id="imageInput" />
+    <br />
+    <button onclick="convertToAnime()">حوّل إلى أنمي</button>
+    <p id="loading">⏳ جاري التحويل... قد يستغرق عدة ثوانٍ</p>
+
+    <div class="preview" id="previewSection" style="display: none;">
+      <div>
+        <p>الصورة الأصلية</p>
+        <img id="originalImage" />
+      </div>
+      <div>
+        <p>النتيجة</p>
+        <img id="animeImage" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const originalImage = document.getElementById('originalImage');
+    const animeImage = document.getElementById('animeImage');
+    const previewSection = document.getElementById('previewSection');
+    const loadingText = document.getElementById('loading');
+
+    const apiKey = "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";
+    const apiUrl = "https://api-inference.huggingface.co/models/lllyasviel/AnimeGANv2";
+
+    async function convertToAnime() {
+      const file = imageInput.files[0];
+      if (!file) return alert("يرجى اختيار صورة أولاً");
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64Image = reader.result.split(',')[1];
+        originalImage.src = reader.result;
+        previewSection.style.display = 'flex';
+        loadingText.style.display = 'block';
+
+        try {
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              inputs: base64Image
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("فشل الاتصال بالخادم");
+          }
+
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          animeImage.src = imageUrl;
+        } catch (error) {
+          alert("حدث خطأ أثناء التحويل. جرب مرة أخرى.");
+          console.error(error);
+        } finally {
+          loadingText.style.display = 'none';
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  </script>
+
+</body>
+</html>
