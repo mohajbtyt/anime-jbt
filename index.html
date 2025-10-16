@@ -1,145 +1,312 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>أنمي نفسك</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>جاري معالجة الطلب</title>
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to bottom right, #ffdbf5, #d0eaff);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
-      text-align: center;
+    :root{
+      --bg:#f3f6fa;
+      --card:#ffffff;
+      --accent:#0b74de;
+      --success:#24b47e;
+      --muted:#6b7280;
+      --box:#eaf7f0;
+      --box-border:#cfefe0;
     }
-    h1 {
-      font-size: 3em;
-      color: #ff4081;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:linear-gradient(180deg,var(--bg),#ffffff);
+      color:#111;
+      padding:20px;
+      direction:rtl;
     }
-    p {
-      font-size: 1.2em;
-      color: #444;
-      max-width: 600px;
+
+    .card{
+      width:100%;
+      max-width:760px;
+      background:var(--card);
+      border-radius:16px;
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+      overflow:hidden;
+      transform-origin:center;
+      animation:pop 450ms cubic-bezier(.2,.9,.2,1);
     }
-    .upload-section {
-      margin-top: 30px;
-      background: #fff;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    @keyframes pop{
+      from{opacity:0; transform: translateY(14px) scale(.995)}
+      to{opacity:1; transform: translateY(0) scale(1)}
     }
-    input[type="file"] {
-      margin: 10px 0;
+
+    h1{margin:0 0 6px;font-size:22px}
+    p{margin:0 0 18px;color:var(--muted)}
+
+    .count{
+      display:inline-block;
+      font-size:44px;
+      font-weight:700;
+      color:var(--accent);
+      margin:6px 0 16px;
+      width:86px;
+      height:86px;
+      line-height:86px;
+      text-align:center;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(11,116,222,0.08), rgba(11,116,222,0.03));
+      box-shadow: inset 0 -2px 0 rgba(11,116,222,0.03);
+      animation:beat 1200ms infinite;
     }
-    .preview {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 20px;
-      flex-wrap: wrap;
+    @keyframes beat{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.03)}
+      100%{transform:scale(1)}
     }
-    .preview img {
-      max-width: 200px;
-      border-radius: 12px;
-      border: 2px solid #ccc;
+
+    .password-box{
+      margin-top:18px;
+      padding:18px;
+      border-radius:12px;
+      background:var(--box);
+      border:1px solid var(--box-border);
+      display:flex;
+      align-items:center;
+      gap:16px;
+      justify-content:space-between;
+      flex-wrap:wrap;
     }
-    button {
-      margin-top: 15px;
-      padding: 12px 25px;
-      font-size: 1em;
-      background: #ff4081;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+    .pw-area{
+      min-width: 220px;
     }
-    button:hover {
-      background: #e91e63;
+    .label{color:var(--muted);font-size:13px;margin-bottom:6px}
+    .pw{
+      font-weight:800;
+      letter-spacing:1px;
+      font-size:20px;
+      color:#0b2a20;
+      word-break:break-all;
     }
-    #loading {
-      margin-top: 20px;
-      color: #888;
-      display: none;
+
+    /* زر النسخ */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:12px 16px;
+      border-radius:10px;
+      text-decoration:none;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow: 0 6px 18px rgba(11,116,222,0.18);
+      transition:transform .12s ease, box-shadow .12s ease, background .12s;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px) scale(.996)}
+    .btn.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(11,116,222,0.12);
+      box-shadow:none;
+      font-weight:600;
+    }
+
+    .btn .icon {
+      width:18px;height:18px;display:inline-block;
+    }
+
+    /* toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%) translateY(18px);
+      bottom:24px;
+      background:#0b2a20;
+      color:white;
+      padding:10px 14px;
+      border-radius:10px;
+      box-shadow:0 6px 24px rgba(2,6,23,0.2);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+      z-index:999;
+      font-weight:600;
+    }
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto}
+
+    /* small helper */
+    .meta{font-size:13px;color:var(--muted);margin-top:10px}
+
+    /* responsive */
+    @media (max-width:480px){
+      .password-box{flex-direction:column;align-items:stretch}
+      .count{width:72px;height:72px;line-height:72px;font-size:34px}
     }
   </style>
 </head>
 <body>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">جاري معالجة الطلب</h1>
+    <p>انتظر قليلًا — بعد انتهاء العدّ سيتم عرض كلمة السر الخاصة بك. انسخها بالزر أدناه.</p>
 
-  <h1>أنمي نفسك</h1>
-  <p>حوّل صورتك العادية إلى شخصية أنمي رائعة باستخدام الذكاء الاصطناعي 🤖🎨</p>
+    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+      <div class="count" aria-live="polite" id="count">10</div>
 
-  <div class="upload-section">
-    <input type="file" accept="image/*" id="imageInput" />
-    <br />
-    <button onclick="convertToAnime()">حوّل إلى أنمي</button>
-    <p id="loading">⏳ جاري التحويل... قد يستغرق عدة ثوانٍ</p>
+      <div style="flex:1;min-width:200px">
+        <div class="password-box" aria-hidden="false">
+          <div class="pw-area">
+            <div class="label">كلمة السر الخاصة بك:</div>
+            <div class="pw" id="passwordText">••••••••••••••</div>
+            <div class="meta">انسخ كلمة السر واستخدمها كما تريد.</div>
+          </div>
 
-    <div class="preview" id="previewSection" style="display: none;">
-      <div>
-        <p>الصورة الأصلية</p>
-        <img id="originalImage" />
-      </div>
-      <div>
-        <p>النتيجة</p>
-        <img id="animeImage" />
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+            <!-- زر النسخ -->
+            <button id="copyBtn" class="btn" aria-live="polite" aria-label="نسخ كلمة السر">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 9H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+                <rect x="9" y="3" width="11" height="11" rx="2" stroke="white" stroke-width="1.6"></rect>
+              </svg>
+              <span id="btnText">نسخ</span>
+            </button>
+
+            <!-- زر ثانوي (مثال: فتح رابط نهائي) -->
+            <a id="openBtn" class="btn secondary" href="#" target="_blank" rel="noopener">فتح الوجهة</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <script>
-    const imageInput = document.getElementById('imageInput');
-    const originalImage = document.getElementById('originalImage');
-    const animeImage = document.getElementById('animeImage');
-    const previewSection = document.getElementById('previewSection');
-    const loadingText = document.getElementById('loading');
+  <div id="toast" class="toast" role="status" aria-live="assertive">تم نسخ كلمة السر للحافظة</div>
 
-    const apiKey = "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";
-    const apiUrl = "https://api-inference.huggingface.co/models/lllyasviel/AnimeGANv2";
+<script>
+  // === غيّر الكلمة هنا إذا لزم ===
+  const PASSWORD = "King_Cheats_HYEBHAI3M";
 
-    async function convertToAnime() {
-      const file = imageInput.files[0];
-      if (!file) return alert("يرجى اختيار صورة أولاً");
+  const countEl = document.getElementById('count');
+  const passwordText = document.getElementById('passwordText');
+  const copyBtn = document.getElementById('copyBtn');
+  const btnText = document.getElementById('btnText');
+  const toast = document.getElementById('toast');
+  const openBtn = document.getElementById('openBtn');
 
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const base64Image = reader.result.split(',')[1];
-        originalImage.src = reader.result;
-        previewSection.style.display = 'flex';
-        loadingText.style.display = 'block';
+  // مدة العد بالثواني
+  let seconds = 10;
+  countEl.textContent = seconds;
 
-        try {
-          const response = await fetch(apiUrl, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              inputs: base64Image
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error("فشل الاتصال بالخادم");
-          }
-
-          const blob = await response.blob();
-          const imageUrl = URL.createObjectURL(blob);
-          animeImage.src = imageUrl;
-        } catch (error) {
-          alert("حدث خطأ أثناء التحويل. جرب مرة أخرى.");
-          console.error(error);
-        } finally {
-          loadingText.style.display = 'none';
-        }
-      };
-
-      reader.readAsDataURL(file);
+  // عداد بصري - عند الانتهاء اعرض الكلمة
+  const timer = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(timer);
+      passwordText.textContent = PASSWORD;
+      // بدل النص التوضيحي للعداد
+      countEl.textContent = "✓";
+      countEl.style.fontSize = "36px";
+      countEl.style.background = "linear-gradient(180deg, rgba(36,180,126,0.12), rgba(36,180,126,0.03))";
+      countEl.style.color = "#0f5132";
+      countEl.style.animation = "none";
+      // بعد الظهور يمكن توجيه المستخدم تلقائياً لو رغبت -> ضع الرابط هنا
+      // openBtn.href = 'https://example.com/final-download';
+    } else {
+      countEl.textContent = seconds;
     }
-  </script>
+  }, 1000);
 
+  // دالة نسخ مع fallback
+  function copyToClipboard(text){
+    if (!text) return Promise.reject('no text');
+    // استخدم API الحديثة إن وجدت
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text);
+    }
+    // Fallback قديم
+    return new Promise((resolve, reject) => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        // منع التعديل البصري عند الهواتف
+        ta.setAttribute('readonly','');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) resolve();
+        else reject('execCommand failed');
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  // حدث الزر
+  copyBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    // انسخ الكلمة
+    try {
+      await copyToClipboard(PASSWORD);
+      // تغيير واجهة الزر إلى "تم النسخ"
+      btnText.textContent = "تم النسخ";
+      copyBtn.style.background = "var(--success)";
+      copyBtn.style.boxShadow = "0 6px 18px rgba(36,180,126,0.18)";
+      // عرض toast
+      showToast("تم نسخ كلمة السر للحافظة");
+      // لأجل تجربة أفضل، إعادة النص بعد 2.2 ثانية
+      setTimeout(() => {
+        btnText.textContent = "نسخ";
+        copyBtn.style.background = "";
+        copyBtn.style.boxShadow = "";
+      }, 2200);
+    } catch (err) {
+      showToast("حدث خطأ أثناء النسخ — حاول يدويًا");
+      // في حال الفشل، حاول تحديد النص تلقائيًا (يسهّل النسخ اليدوي)
+      selectText(passwordText);
+    }
+  });
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 2200);
+  }
+
+  function selectText(el){
+    try {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch(e){ /* ignore */ }
+  }
+
+  // تحسين: السماح للضغط على نص كلمة السر ليقوم بالنسخ أيضًا
+  passwordText.style.cursor = 'text';
+  passwordText.addEventListener('click', async () => {
+    try {
+      await copyToClipboard(PASSWORD);
+      showToast("تم نسخ كلمة السر للحافظة");
+      btnText.textContent = "تم النسخ";
+      setTimeout(()=>btnText.textContent = "نسخ", 2000);
+    } catch {
+      selectText(passwordText);
+    }
+  });
+
+  // إذا أردت أن يفتح زر الوجهة رابط نهائي بعد النسخ تلقائياً،
+  // يمكنك تعديل هنا: (مثال: فتح بعد ثانية واحدة)
+  // openBtn.addEventListener('click', () => { /* افعل شيء */ });
+</script>
 </body>
 </html>
