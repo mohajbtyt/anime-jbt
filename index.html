@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جاري معالجة الطلب</title>
+  <title>Lyzerox 👑</title>
   <style>
     :root{
-      --bg:#f3f6fa;
+      --bg:#eef3ff;
       --card:#ffffff;
       --accent:#0b74de;
       --success:#24b47e;
       --muted:#6b7280;
-      --box:#eaf7f0;
-      --box-border:#cfefe0;
+      --box:#f1f9ff;
+      --box-border:#dcecff;
     }
     *{box-sizing:border-box}
     body{
@@ -21,8 +21,8 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background:linear-gradient(180deg,var(--bg),#ffffff);
+      font-family:"Cairo","Segoe UI",sans-serif;
+      background:linear-gradient(180deg,var(--bg),#fff);
       color:#111;
       padding:20px;
       direction:rtl;
@@ -30,283 +30,210 @@
 
     .card{
       width:100%;
-      max-width:760px;
+      max-width:700px;
       background:var(--card);
-      border-radius:16px;
-      padding:28px;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
-      overflow:hidden;
-      transform-origin:center;
-      animation:pop 450ms cubic-bezier(.2,.9,.2,1);
-    }
-    @keyframes pop{
-      from{opacity:0; transform: translateY(14px) scale(.995)}
-      to{opacity:1; transform: translateY(0) scale(1)}
+      border-radius:20px;
+      padding:30px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+      animation:fadeIn .6s ease;
     }
 
-    h1{margin:0 0 6px;font-size:22px}
-    p{margin:0 0 18px;color:var(--muted)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+    /* تأثير التوهّج حول الاسم */
+    h1{
+      font-size:34px;
+      font-weight:900;
+      text-align:center;
+      margin:0 0 10px;
+      color:#0b74de;
+      text-shadow:0 0 12px rgba(11,116,222,0.6), 0 0 20px rgba(11,116,222,0.3);
+      animation:glowPulse 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes glowPulse {
+      0% { text-shadow:0 0 12px rgba(11,116,222,0.5), 0 0 20px rgba(11,116,222,0.2);}
+      100% { text-shadow:0 0 20px rgba(11,116,222,0.8), 0 0 30px rgba(11,116,222,0.5);}
+    }
+
+    p{
+      text-align:center;
+      color:var(--muted);
+      margin:0 0 25px;
+      font-size:15px;
+    }
 
     .count{
       display:inline-block;
-      font-size:44px;
+      font-size:40px;
       font-weight:700;
       color:var(--accent);
-      margin:6px 0 16px;
-      width:86px;
-      height:86px;
-      line-height:86px;
+      width:82px;
+      height:82px;
+      line-height:82px;
       text-align:center;
-      border-radius:12px;
-      background:linear-gradient(180deg, rgba(11,116,222,0.08), rgba(11,116,222,0.03));
-      box-shadow: inset 0 -2px 0 rgba(11,116,222,0.03);
-      animation:beat 1200ms infinite;
+      border-radius:14px;
+      background:linear-gradient(180deg,rgba(11,116,222,0.08),rgba(11,116,222,0.03));
+      margin-bottom:15px;
+      animation:beat 1.2s infinite;
     }
+
     @keyframes beat{
-      0%{transform:scale(1)}
-      50%{transform:scale(1.03)}
-      100%{transform:scale(1)}
+      0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}
     }
 
     .password-box{
-      margin-top:18px;
       padding:18px;
-      border-radius:12px;
+      border-radius:14px;
       background:var(--box);
       border:1px solid var(--box-border);
       display:flex;
       align-items:center;
-      gap:16px;
       justify-content:space-between;
       flex-wrap:wrap;
-    }
-    .pw-area{
-      min-width: 220px;
-    }
-    .label{color:var(--muted);font-size:13px;margin-bottom:6px}
-    .pw{
-      font-weight:800;
-      letter-spacing:1px;
-      font-size:20px;
-      color:#0b2a20;
-      word-break:break-all;
+      gap:15px;
+      margin-bottom:20px;
     }
 
-    /* زر النسخ */
+    .pw-area{min-width:220px;}
+    .label{color:var(--muted);font-size:13px;margin-bottom:4px}
+    .pw{font-weight:800;font-size:20px;color:#0b2a20;word-break:break-all;user-select:all}
+
     .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
       background:var(--accent);
       color:white;
       border:none;
-      padding:12px 16px;
-      border-radius:10px;
-      text-decoration:none;
-      cursor:pointer;
+      border-radius:12px;
+      padding:12px 20px;
       font-weight:700;
-      box-shadow: 0 6px 18px rgba(11,116,222,0.18);
-      transition:transform .12s ease, box-shadow .12s ease, background .12s;
-      user-select:none;
+      cursor:pointer;
+      transition:0.2s;
+      box-shadow:0 6px 18px rgba(11,116,222,0.2);
     }
-    .btn:active{transform:translateY(1px) scale(.996)}
-    .btn.secondary{
-      background:transparent;
-      color:var(--accent);
-      border:1px solid rgba(11,116,222,0.12);
-      box-shadow:none;
-      font-weight:600;
+    .btn:hover{transform:scale(1.05)}
+    .btn:active{transform:scale(0.98)}
+
+    .socials{
+      display:flex;
+      justify-content:center;
+      gap:15px;
+      flex-wrap:wrap;
+      margin-top:25px;
     }
 
-    .btn .icon {
-      width:18px;height:18px;display:inline-block;
+    .yt{
+      background:#ff0000;
+      color:white;
+      border:none;
+      border-radius:12px;
+      padding:12px 22px;
+      font-weight:700;
+      text-decoration:none;
+      box-shadow:0 6px 18px rgba(255,0,0,0.25);
+      transition:0.2s;
     }
+    .yt:hover{transform:scale(1.05)}
+    .tg{
+      background:#2aabee;
+      color:white;
+      border:none;
+      border-radius:12px;
+      padding:12px 22px;
+      font-weight:700;
+      text-decoration:none;
+      box-shadow:0 6px 18px rgba(42,171,238,0.25);
+      transition:0.2s;
+    }
+    .tg:hover{transform:scale(1.05)}
 
-    /* toast */
     .toast{
       position:fixed;
+      bottom:25px;
       left:50%;
-      transform:translateX(-50%) translateY(18px);
-      bottom:24px;
+      transform:translateX(-50%) translateY(15px);
       background:#0b2a20;
-      color:white;
+      color:#fff;
       padding:10px 14px;
       border-radius:10px;
-      box-shadow:0 6px 24px rgba(2,6,23,0.2);
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
-      z-index:999;
       font-weight:600;
+      opacity:0;
+      transition:0.2s;
     }
-    .toast.show{opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto}
-
-    /* small helper */
-    .meta{font-size:13px;color:var(--muted);margin-top:10px}
-
-    /* responsive */
-    @media (max-width:480px){
-      .password-box{flex-direction:column;align-items:stretch}
-      .count{width:72px;height:72px;line-height:72px;font-size:34px}
-    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
-  <div class="card" role="main" aria-labelledby="title">
-    <h1 id="title">جاري معالجة الطلب</h1>
-    <p>انتظر قليلًا — بعد انتهاء العدّ سيتم عرض كلمة السر الخاصة بك. انسخها بالزر أدناه.</p>
+  <div class="card">
+    <h1>Lyzerox 👑</h1>
+    <p>انتظر قليلًا — بعد انتهاء العدّ ستظهر كلمة السر الخاصة بك أدناه.</p>
 
-    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
-      <div class="count" aria-live="polite" id="count">10</div>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div id="count" class="count">10</div>
 
-      <div style="flex:1;min-width:200px">
-        <div class="password-box" aria-hidden="false">
-          <div class="pw-area">
-            <div class="label">كلمة السر الخاصة بك:</div>
-            <div class="pw" id="passwordText">••••••••••••••</div>
-            <div class="meta">انسخ كلمة السر واستخدمها كما تريد.</div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-            <!-- زر النسخ -->
-            <button id="copyBtn" class="btn" aria-live="polite" aria-label="نسخ كلمة السر">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M9 9H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-                <rect x="9" y="3" width="11" height="11" rx="2" stroke="white" stroke-width="1.6"></rect>
-              </svg>
-              <span id="btnText">نسخ</span>
-            </button>
-
-            <!-- زر ثانوي (مثال: فتح رابط نهائي) -->
-            <a id="openBtn" class="btn secondary" href="#" target="_blank" rel="noopener">فتح الوجهة</a>
-          </div>
+      <div class="password-box">
+        <div class="pw-area">
+          <div class="label">كلمة السر:</div>
+          <div id="passwordText" class="pw">••••••••••••••</div>
         </div>
+
+        <button id="copyBtn" class="btn">نسخ</button>
+      </div>
+
+      <div class="socials">
+        <a href="https://youtube.com/@lyzerox1?si=mREVLSkUqcGfKIl9" target="_blank" class="yt">🎥 YouTube</a>
+        <a href="https://t.me/+5wmvpnThDcsyZjZk" target="_blank" class="tg">📢 Telegram</a>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="assertive">تم نسخ كلمة السر للحافظة</div>
+  <div id="toast" class="toast">تم نسخ كلمة السر ✅</div>
 
 <script>
-  // === غيّر الكلمة هنا إذا لزم ===
-  const PASSWORD = "King_Cheats_HYEBHAI3M";
+const PASSWORD = "King_Cheats_HYEBHAI3M";
+const count = document.getElementById("count");
+const pw = document.getElementById("passwordText");
+const copyBtn = document.getElementById("copyBtn");
+const toast = document.getElementById("toast");
+let seconds = 10;
 
-  const countEl = document.getElementById('count');
-  const passwordText = document.getElementById('passwordText');
-  const copyBtn = document.getElementById('copyBtn');
-  const btnText = document.getElementById('btnText');
-  const toast = document.getElementById('toast');
-  const openBtn = document.getElementById('openBtn');
-
-  // مدة العد بالثواني
-  let seconds = 10;
-  countEl.textContent = seconds;
-
-  // عداد بصري - عند الانتهاء اعرض الكلمة
-  const timer = setInterval(() => {
-    seconds--;
-    if (seconds <= 0) {
-      clearInterval(timer);
-      passwordText.textContent = PASSWORD;
-      // بدل النص التوضيحي للعداد
-      countEl.textContent = "✓";
-      countEl.style.fontSize = "36px";
-      countEl.style.background = "linear-gradient(180deg, rgba(36,180,126,0.12), rgba(36,180,126,0.03))";
-      countEl.style.color = "#0f5132";
-      countEl.style.animation = "none";
-      // بعد الظهور يمكن توجيه المستخدم تلقائياً لو رغبت -> ضع الرابط هنا
-      // openBtn.href = 'https://example.com/final-download';
-    } else {
-      countEl.textContent = seconds;
-    }
-  }, 1000);
-
-  // دالة نسخ مع fallback
-  function copyToClipboard(text){
-    if (!text) return Promise.reject('no text');
-    // استخدم API الحديثة إن وجدت
-    if (navigator.clipboard && navigator.clipboard.writeText){
-      return navigator.clipboard.writeText(text);
-    }
-    // Fallback قديم
-    return new Promise((resolve, reject) => {
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        // منع التعديل البصري عند الهواتف
-        ta.setAttribute('readonly','');
-        ta.style.position = 'absolute';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        ta.setSelectionRange(0, ta.value.length);
-        const ok = document.execCommand('copy');
-        document.body.removeChild(ta);
-        if (ok) resolve();
-        else reject('execCommand failed');
-      } catch (e) {
-        reject(e);
-      }
-    });
+// عد تنازلي
+const timer = setInterval(()=>{
+  seconds--;
+  if(seconds <= 0){
+    clearInterval(timer);
+    count.textContent = "✓";
+    count.style.color = "#24b47e";
+    count.style.animation = "none";
+    pw.textContent = PASSWORD;
+  } else {
+    count.textContent = seconds;
   }
+},1000);
 
-  // حدث الزر
-  copyBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    // انسخ الكلمة
-    try {
-      await copyToClipboard(PASSWORD);
-      // تغيير واجهة الزر إلى "تم النسخ"
-      btnText.textContent = "تم النسخ";
-      copyBtn.style.background = "var(--success)";
-      copyBtn.style.boxShadow = "0 6px 18px rgba(36,180,126,0.18)";
-      // عرض toast
-      showToast("تم نسخ كلمة السر للحافظة");
-      // لأجل تجربة أفضل، إعادة النص بعد 2.2 ثانية
-      setTimeout(() => {
-        btnText.textContent = "نسخ";
-        copyBtn.style.background = "";
-        copyBtn.style.boxShadow = "";
-      }, 2200);
-    } catch (err) {
-      showToast("حدث خطأ أثناء النسخ — حاول يدويًا");
-      // في حال الفشل، حاول تحديد النص تلقائيًا (يسهّل النسخ اليدوي)
-      selectText(passwordText);
-    }
-  });
-
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(()=>toast.classList.remove('show'), 2200);
+// نسخ النص أو تحديده عند الفشل
+copyBtn.onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(PASSWORD);
+    showToast("تم نسخ كلمة السر ✅");
+  }catch{
+    selectText(pw);
+    showToast("⚠️ تم تحديد النص — انسخه يدويًا");
   }
+};
 
-  function selectText(el){
-    try {
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-    } catch(e){ /* ignore */ }
-  }
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),2000);
+}
 
-  // تحسين: السماح للضغط على نص كلمة السر ليقوم بالنسخ أيضًا
-  passwordText.style.cursor = 'text';
-  passwordText.addEventListener('click', async () => {
-    try {
-      await copyToClipboard(PASSWORD);
-      showToast("تم نسخ كلمة السر للحافظة");
-      btnText.textContent = "تم النسخ";
-      setTimeout(()=>btnText.textContent = "نسخ", 2000);
-    } catch {
-      selectText(passwordText);
-    }
-  });
-
-  // إذا أردت أن يفتح زر الوجهة رابط نهائي بعد النسخ تلقائياً،
-  // يمكنك تعديل هنا: (مثال: فتح بعد ثانية واحدة)
-  // openBtn.addEventListener('click', () => { /* افعل شيء */ });
+function selectText(el){
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
 </script>
 </body>
 </html>
