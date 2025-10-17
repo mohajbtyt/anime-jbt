@@ -40,7 +40,6 @@
 
     @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
-    /* تأثير التوهّج حول الاسم */
     h1{
       font-size:34px;
       font-weight:900;
@@ -113,6 +112,14 @@
     .btn:hover{transform:scale(1.05)}
     .btn:active{transform:scale(0.98)}
 
+    /* مظهر الزر المعطّل */
+    .btn[disabled]{
+      opacity:0.6;
+      transform:none;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
     .socials{
       display:flex;
       justify-content:center;
@@ -176,7 +183,8 @@
           <div id="passwordText" class="pw">••••••••••••••</div>
         </div>
 
-        <button id="copyBtn" class="btn">نسخ</button>
+        <!-- الزر معطّل مبدئيًا -->
+        <button id="copyBtn" class="btn" disabled>نسخ</button>
       </div>
 
       <div class="socials">
@@ -189,7 +197,7 @@
   <div id="toast" class="toast">تم نسخ كلمة السر ✅</div>
 
 <script>
-const PASSWORD = "King_Cheats_HYEBHAI3M";
+const PASSWORD = "GOD-X-MODS-VOLIC-12H";
 const count = document.getElementById("count");
 const pw = document.getElementById("passwordText");
 const copyBtn = document.getElementById("copyBtn");
@@ -204,16 +212,43 @@ const timer = setInterval(()=>{
     count.textContent = "✓";
     count.style.color = "#24b47e";
     count.style.animation = "none";
+
+    // إظهار كلمة السر
     pw.textContent = PASSWORD;
+
+    // تفعيل الزر لأن الآن يمكن النسخ يدوياً
+    copyBtn.disabled = false;
+
+    // محاولة النسخ التلقائي (قد يتم حظره في بعض المتصفحات)
+    tryAutoCopy(PASSWORD);
   } else {
     count.textContent = seconds;
   }
 },1000);
 
-// نسخ النص أو تحديده عند الفشل
-copyBtn.onclick = async ()=>{
+async function tryAutoCopy(text){
+  if(!navigator.clipboard || !navigator.clipboard.writeText){
+    // إذا الواجهة غير متاحة، نحدد النص كبديل
+    selectText(pw);
+    showToast("⚠️ لا يدعم المتصفح النسخ التلقائي — انسخه يدويًا");
+    return;
+  }
+
   try{
-    await navigator.clipboard.writeText(PASSWORD);
+    await navigator.clipboard.writeText(text);
+    showToast("تم نسخ كلمة السر ✅");
+  }catch(err){
+    // إذا رفض المتصفح النسخ التلقائي (غير تفاعل المستخدم)، نحدد النص ونطلب النسخ اليدوي
+    selectText(pw);
+    showToast("⚠️ النسخ التلقائي محظور — اضغط نسخ لنسخه يدوياً");
+  }
+}
+
+// نسخ النص عند الضغط على الزر (يعمل فقط بعد تفعيله)
+copyBtn.onclick = async ()=>{
+  const textToCopy = pw.textContent || PASSWORD;
+  try{
+    await navigator.clipboard.writeText(textToCopy);
     showToast("تم نسخ كلمة السر ✅");
   }catch{
     selectText(pw);
