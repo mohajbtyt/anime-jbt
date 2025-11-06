@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI VIDEO LYZEROX 🎬</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: "Cairo", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #aaa;
+      margin-bottom: 20px;
+      max-width: 400px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 400px;
+      height: 100px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      resize: none;
+      outline: none;
+    }
+    button {
+      margin-top: 15px;
+      background: #8b5cf6;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #7c3aed;
+    }
+    video {
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 AI VIDEO LYZEROX</h1>
+  <p>اكتب وصف الفيديو بالعربية وسنحوّله إلى فيديو بالذكاء الاصطناعي!</p>
+
+  <textarea id="prompt" placeholder="مثلاً: نسر يطير فوق الجبال وقت الغروب..."></textarea>
+  <button id="generateBtn">توليد الفيديو</button>
+
+  <video id="video" controls style="display:none;"></video>
+  <p id="status"></p>
+
+  <script>
+    const btn = document.getElementById("generateBtn");
+    const promptInput = document.getElementById("prompt");
+    const videoElement = document.getElementById("video");
+    const statusText = document.getElementById("status");
+
+    btn.onclick = async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) {
+        alert("اكتب وصف الفيديو أولاً");
+        return;
+      }
+
+      btn.disabled = true;
+      statusText.textContent = "⏳ جاري توليد الفيديو...";
+      videoElement.style.display = "none";
+
+      try {
+        // ⚠️ ضع مفتاح API هنا (مؤقتًا فقط للتجربة المحلية)
+        const API_KEY = "YOUR_REPLICATE_API_TOKEN"; // استبدلها بمفتاحك
+
+        const res = await fetch("https://api.replicate.com/v1/predictions", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            version: "8f7d50e1e3e57f8b3d4cb9b5f7e42d2d0b2c85fa4c4c5e9bba659f8b68a8f53c", // نموذج Pika Video
+            input: { prompt },
+          }),
+        });
+
+        const data = await res.json();
+
+        // انتظار اكتمال التوليد
+        let result;
+        while (!result || result.status !== "succeeded") {
+          const poll = await fetch(data.urls.get, {
+            headers: { Authorization: `Token ${API_KEY}` },
+          });
+          result = await poll.json();
+          if (result.status === "failed") throw new Error("فشل توليد الفيديو");
+          if (result.status !== "succeeded") await new Promise(r => setTimeout(r, 4000));
+        }
+
+        const videoUrl = result.output[0];
+        videoElement.src = videoUrl;
+        videoElement.style.display = "block";
+        statusText.textContent = "🎉 تم التوليد بنجاح!";
+      } catch (err) {
+        console.error(err);
+        statusText.textContent = "❌ حدث خطأ أثناء التوليد.";
+      }
+
+      btn.disabled = false;
+    };
+  </script>
+</body>
+</html>
