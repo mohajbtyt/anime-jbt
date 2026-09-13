@@ -1,0 +1,11 @@
+{
+  "name": "ToolBox DZ",
+  "short_name": "ToolBox DZ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#2563eb",
+  "lang": "ar",
+  "dir": "rtl",
+  "description": "Fast bilingual everyday tools."
+}

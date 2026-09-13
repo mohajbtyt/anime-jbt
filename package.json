@@ -1,0 +1,13 @@
+{
+  "name": "toolbox-dz",
+  "version": "1.0.0",
+  "description": "ToolBox DZ - Fast bilingual everyday tools.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "qrcode": "^1.5.4"
+  }
+}
